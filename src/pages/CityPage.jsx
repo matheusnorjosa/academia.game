@@ -16,6 +16,7 @@ export default function CityPage({ onGoTrain }) {
   const buildings = useGameStore((s) => s.buildings)
   const checkins = useGameStore((s) => s.checkins)
   const player = useGameStore((s) => s.player)
+  const profile = useGameStore((s) => s.profile)
   const now = useNow(1000)
 
   const [buildSlot, setBuildSlot] = useState(null) // slot vazio clicado
@@ -49,8 +50,8 @@ export default function CityPage({ onGoTrain }) {
 
       {isEmptyCity && (
         <div className="rounded-2xl border-2 border-dashed border-green-700/40 bg-white/60 p-3 text-center text-sm font-bold text-green-900">
-          Sua cidade está vazia! Faça seu primeiro check-in na academia para ganhar
-          materiais. 💪
+          Bem-vindo(a), {profile?.name?.split(' ')[0] ?? 'atleta'}! Sua cidade está
+          vazia — faça seu primeiro check-in na academia para ganhar materiais. 💪
         </div>
       )}
 

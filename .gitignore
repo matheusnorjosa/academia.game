@@ -5,3 +5,10 @@ dist
 npm-debug.log*
 .claude
 CLAUDE.md
+
+# Variáveis de ambiente: NUNCA commitar — segredos vivem só na Vercel.
+# (.env.example é a exceção: é um modelo sem valores reais)
+.env
+.env.*
+!.env.example
+.vercel

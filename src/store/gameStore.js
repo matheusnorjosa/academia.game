@@ -35,6 +35,8 @@ export const useGameStore = create(
   persist(
     (set, get) => ({
       // ── Estado ────────────────────────────────────────────
+      profile: null, // { name, email } — cadastro (Tela de boas-vindas)
+      profileSynced: false, // cadastro já foi enviado ao banco?
       player: { wood: 0, stone: 0, iron: 0, turbines: 0 },
       gymLocation: { ...DEFAULT_GYM },
       buildings: [], // { uid, typeId, slot, status: 'building' | 'done', startedAt, finishesAt }
@@ -42,6 +44,29 @@ export const useGameStore = create(
       checkins: [], // { date: 'AAAA-MM-DD', at, photo (thumb base64) }
       pendingLoot: null, // recompensa aguardando o "Coletar" do LootModal
       toast: null,
+
+      // ── Cadastro ──────────────────────────────────────────
+      setProfile: (name, email) =>
+        set({ profile: { name, email }, profileSynced: false }),
+
+      // Envia o cadastro para o banco via função serverless (/api/register).
+      // Nenhuma chave existe no frontend — o segredo (DATABASE_URL) vive só
+      // na Vercel. Sem rede ou rodando local (sem /api), falha em silêncio
+      // e tenta de novo na próxima abertura do app.
+      syncProfile: async () => {
+        const { profile, profileSynced } = get()
+        if (!profile || profileSynced) return
+        try {
+          const res = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(profile),
+          })
+          if (res.ok) set({ profileSynced: true })
+        } catch {
+          // offline ou dev local sem backend — fica para a próxima
+        }
+      },
 
       // ── Check-in na academia ──────────────────────────────
       setGymLocation: (lat, lng, radius = DEFAULT_GYM_RADIUS, name) =>
@@ -168,6 +193,8 @@ export const useGameStore = create(
         return persisted
       },
       partialize: (s) => ({
+        profile: s.profile,
+        profileSynced: s.profileSynced,
         player: s.player,
         gymLocation: s.gymLocation,
         buildings: s.buildings,

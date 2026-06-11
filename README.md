@@ -55,9 +55,29 @@ fora de localhost.
 ## Deploy (Vercel)
 
 Repositório: [`matheusnorjosa/academia.game`](https://github.com/matheusnorjosa/academia.game).
-O projeto é 100% estático — importado na [Vercel](https://vercel.com/new), que
-detecta o framework Vite automaticamente (build `vite build`, saída `dist/`).
-Cada `git push` na branch `main` publica uma nova versão sozinho.
+Importado na [Vercel](https://vercel.com/new), que detecta o framework Vite
+automaticamente (build `vite build`, saída `dist/`). A pasta `api/` vira funções
+serverless. Cada `git push` na branch `main` publica uma nova versão sozinho.
+
+## Banco de dados (cadastro)
+
+A tela de cadastro guarda **apenas nome e e-mail**, num Postgres gratuito
+([Neon](https://neon.tech)) conectado pela própria Vercel:
+
+1. No projeto da Vercel: **Storage → Create Database → Neon (Postgres)** →
+   Create & Connect. A env var `DATABASE_URL` é criada sozinha.
+2. Redeploy. Pronto — a tabela `players` se cria sozinha no primeiro cadastro.
+
+### 🔒 Política de segredos (regra do projeto)
+
+- **Nenhum segredo no repositório.** O `DATABASE_URL` existe só como variável
+  de ambiente na Vercel; `.env*` está no `.gitignore` (exceto `.env.example`,
+  que é um modelo sem valores reais).
+- **Nenhuma chave no navegador.** Quem fala com o banco é a função serverless
+  `api/register.js` — o frontend só faz `POST /api/register`.
+- **Só escrita.** Não existe endpoint de leitura: os e-mails cadastrados são
+  visíveis apenas para o dono do banco (dashboard Neon/Vercel).
+- As selfies de treino nunca saem do aparelho (ficam no `localStorage`).
 
 ## Stack
 
@@ -71,6 +91,7 @@ Cada `git push` na branch `main` publica uma nova versão sozinho.
 
 | Funcionalidade            | Status                                              |
 | ------------------------- | --------------------------------------------------- |
+| Cadastro (nome + e-mail)  | ✅ real (Neon Postgres via função serverless)       |
 | Câmera ao vivo (selfie)   | ✅ real                                             |
 | Validação de raio por GPS | ✅ real (haversine) + 🧪 modo teste p/ desenvolver   |
 | Cadastro da academia      | ✅ real (usa a posição atual)                       |
@@ -84,6 +105,8 @@ Os pontos de integração futura estão marcados com comentários `FUTURO:` no c
 ## Estrutura
 
 ```
+api/
+  register.js           ← função serverless (Vercel) que grava o cadastro no Neon
 src/
   store/gameStore.js    ← toda a lógica/economia do jogo
   data/buildings.js     ← catálogo de prédios + NPCs (balanceamento)

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import CityPage from './pages/CityPage'
 import CheckinPage from './pages/CheckinPage'
+import RegisterPage from './pages/RegisterPage'
 import LootModal from './components/LootModal'
 import Toast from './components/Toast'
 import { useGameStore } from './store/gameStore'
@@ -8,6 +9,8 @@ import { useGameStore } from './store/gameStore'
 export default function App() {
   // Protótipo sem router: alternância simples de view ('city' | 'checkin')
   const [view, setView] = useState('city')
+  const profile = useGameStore((s) => s.profile)
+  const syncProfile = useGameStore((s) => s.syncProfile)
   const tickConstructions = useGameStore((s) => s.tickConstructions)
 
   // Relógio global das obras: a cada segundo verifica se alguma construção
@@ -18,9 +21,16 @@ export default function App() {
     return () => clearInterval(id)
   }, [tickConstructions])
 
+  // Cadastros pendentes: tenta enviar ao banco na abertura e ao cadastrar
+  useEffect(() => {
+    syncProfile()
+  }, [syncProfile, profile])
+
   return (
     <div className="mx-auto min-h-dvh max-w-md bg-gradient-to-b from-sky-200 via-lime-100 to-lime-200 shadow-2xl">
-      {view === 'city' ? (
+      {!profile ? (
+        <RegisterPage />
+      ) : view === 'city' ? (
         <CityPage onGoTrain={() => setView('checkin')} />
       ) : (
         <CheckinPage onDone={() => setView('city')} />
