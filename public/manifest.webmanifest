@@ -1,0 +1,19 @@
+{
+  "name": "Jogo da Academia — Treine e Construa",
+  "short_name": "Academia",
+  "description": "Transforme seus treinos na academia em uma cidade próspera",
+  "lang": "pt-BR",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#d9f99d",
+  "theme_color": "#4d7c0f",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme {
+  --font-pixel: "Press Start 2P", monospace;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --color-grass-1: #7cb84d;
+  --color-grass-2: #8cc55c;
+}
+
+html,
+body {
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes pop {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.animate-pop {
+  animation: pop 0.25s ease-out both;
+}
+
+@keyframes drop {
+  0% { transform: translateY(-16px); opacity: 0; }
+  70% { transform: translateY(3px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.animate-drop {
+  animation: drop 0.45s ease-out both;
+}
