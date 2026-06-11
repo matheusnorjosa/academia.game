@@ -1,7 +1,8 @@
 # 🏋️ Jogo da Academia — Treine e Construa
 
-Protótipo de PWA que transforma a rotina de academia em um **jogo de construção de
-cidade** (estilo fazendinha top-down, inspirado em Stardew Valley).
+Um jogo em navegador para me ajudar a ir pra academia: protótipo de PWA que
+transforma a rotina de treinos em um **jogo de construção de cidade** (estilo
+fazendinha top-down, inspirado em Stardew Valley).
 
 ## O loop do jogo
 
